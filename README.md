@@ -51,7 +51,7 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 
 ## Setup
 
-#### Node.js / Express Setup
+### Node.js / Express Setup
 1. Fork and clone and initialize with `npm`.
 2. `touch server.js` in root of project.
 3. Install the following via `npm`
@@ -70,7 +70,7 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
     - `routes/products.js` --> `http://localhost:3000/products`
     - `routes/cart.js`     --> `http://localhost:3000/cart`
 
-#### Knex setup
+### Knex setup
 
 Follow along with the below instructions for setting up knex.js. You can also refer to the [knex setup gist](https://gist.github.com/NigelEarle/80150ff1c50031e59b872baf0e474977) for a more in-depth explanation.
 
@@ -88,6 +88,7 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 ### Users
 
 - `GET - /users/:user_id`
+
     - Fetch user by id - reference by `req.params.user_id`.
         - If user id not found, respond with `{ message: 'User not found' }`
         - If successful, respond with user object.
@@ -108,25 +109,35 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
     - Delete user, reference by `req.params.user_id`.
         - If user id not found, respond with `{ message: 'User ID not found' }`
         - If successful, respond with `{ message: 'User id: ${user_id} successfully deleted' }`
+
 ---
 
 ### Products
 
 - `GET - /products`
+
     - Fetch all products from db.
         - If successful, respond with all products.
+
 - `GET - /products/:product_id`
+
     - Fetch single product, reference by `req.params.product_id`.
         - If product id not found, respond with `{ message: 'Product not found' }`
         - If successful, respond with product object from db.
+
 - `POST - /products/new`
+
     - Request body should include all fields required by products table (`title`, `description`, `inventory`, `price`).
         - If any required field is missing from request body, responds with `{ message: 'Must POST all product fields' }`
         - If successful, respond with posted product from db.
+
 - `PUT - /products/:product_id/update`
+
     - Request body should include any and all changes specific to existing columns in db. Product can be referenced by `req.params.id`.
         - If successful, respond with `{ message: 'Product: ${product_id} has been updated' }`
+
 - `DELETE - /products/:product_id/delete`
+
     - Delete product by `req.params.product_id`
         - If product_id not found, respond with `{ message: 'Product id: ${product_id} not found' } `
         - If successful, repsond with `{ message: 'Product id: ${product_id} successfully deleted' }`
@@ -136,11 +147,15 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 ### Cart
 
 - `GET - /cart/:user_id`
+
     - Fetch all products, reference by `req.params.user_id`, from products through cart.
         - If successful, resond with all products matching user id through cart
+
 - `POST - /cart/:user_id/:product_id`
+
     - Insert into Cart table with `req.params.user_id` and `req.params.product_id` valid foreign keys.
         - If successful, respond with `{ success: true }`
+
 - `DELETE - /cart/:user_id/:product_id`
     - Remove record from db where user id and product id match `req.params`
         - If successful, respond with `{ success: true }`
