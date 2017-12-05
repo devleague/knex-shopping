@@ -72,12 +72,11 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 
 ### Knex setup
 
-Follow along with the below instructions for setting up knex.js. You can also refer to the [knex setup gist](https://gist.github.com/NigelEarle/80150ff1c50031e59b872baf0e474977) for a more in-depth explanation.
+Follow the instructions for setting up knex.js in the [knex setup gist](https://gist.github.com/NigelEarle/80150ff1c50031e59b872baf0e474977).
 
-1. `touch knexfile.js` in root of project and create your enviroment configuration.
-2. `mkdir` migrations and seeds directories in root of project. (Be sure to reference these directory paths in `migration` and `seed` config objects in `knexfile.js`)
-3. Create migration, seed scripts to create tables and popluate with data. (Reference [migration and seed gist](https://gist.github.com/NigelEarle/70db130cc040cc2868555b29a0278261) for instructions)
-4. Run migration and seed scripts
+Follow the [knex migrations and seeds gist](https://gist.github.com/NigelEarle/70db130cc040cc2868555b29a0278261) for creating migration and seed scripts to populate your database.
+
+Ask an instructor or TA for help if you have questions!
 
 ---
 
