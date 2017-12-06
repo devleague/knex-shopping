@@ -45,7 +45,6 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 | user_id      | Integer (FK - ref. Users) |
 | products_id  | Integer (FK - ref. Products) |
 | created_at   | Date (timestamp) |
-| updated_at   | Date (timestamp) |
 
 ---
 
