@@ -127,7 +127,7 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 - `POST - /products/new`
 
     - Request body should include all fields required by products table (`title`, `description`, `inventory`, `price`).
-        - If any required field is missing from request body, responds with `{ message: 'Must POST all product fields' }`
+        - If any required field is missing from request body, responds with `{ message: 'Must send all product fields' }`
         - If successful, respond with posted product from db.
 
 - `PUT - /products/:product_id/update`
@@ -150,14 +150,14 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
     - Fetch all products, reference by `req.params.user_id`, from products through cart.
         - If successful, resond with all products matching user id through cart
 
-- `POST - /cart/:user_id/:product_id`
+- `POST - /cart/:user_id/`
 
-    - Insert into Cart table with `req.params.user_id` and `req.params.product_id` valid foreign keys.
+    - Request body should include `product_id`. Insert into Cart table with `req.params.user_id` and `req.body.product_id` valid foreign keys.
         - If successful, respond with `{ success: true }`
 
-- `DELETE - /cart/:user_id/:product_id`
-    - Remove record from db where user id and product id match `req.params`
-        - If successful, respond with `{ success: true }`
+- `DELETE - /cart/:cart_item_id/delete`
+    - Remove record from db where `req.params.cart_item_id` matches.
+        - If successful, respond with `{message: Cart item id: ${cart_item_id} successfully deleted`
 
 ---
 
