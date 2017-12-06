@@ -163,10 +163,10 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 # Stretch Goals
 
 Create a `Purchases/Ledger` table to track purchases by `user_id`.
-GET purchases by user id
-GET user id purchases within timeframe - month, year
-POST checkout endpoint ref. purchases table
-should decrement inventory of product
+- GET purchases by user id
+- GET user id purchases within timeframe - month, year
+- POST checkout endpoint ref. purchases table
+- Should decrement inventory of product
 
 ### Example Purchases/Ledger Table
 
