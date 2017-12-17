@@ -89,7 +89,7 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 
 - `GET - /users/:user_id`
     - Find a user using `req.params.user_id`.
-        - If user id not found, respond with `{ message: 'User not found' }`
+        - If `user_id` not found, respond with `{ message: 'User not found' }`
         - If successful, respond with user object.
 - `POST - /users/login`
     - Log a user in.
@@ -102,8 +102,8 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
     }
     ```
     - Find a user by `req.body.email` and check existing password against `req.body.password`.
-        - If email not found, respond with `{ message: 'User not found' }`
-        - If passwords don't match, respond with `{ message: 'Incorrect password' }`
+        - If `email` not found, respond with JSON `{ "message": "User not found" }`
+        - If passwords don't match, respond with JSON `{ "message": "Incorrect password" }`
         - If successful, respond with user object.
 
 - `POST - /users/register`
@@ -118,23 +118,26 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
     ```
 
     - Find a user in the db using `req.body.email`.
-        - If email already exists, repond with `{ message: 'User already exists' }`
+        - If `email` already exists, repond with JSON `{ "message": "User already exists" }`
         - If successful, respond with posted user object from db.
+
 - `PUT - /users/:user_id/forgot-password`
     - Update an existing users password.
-    Example request body payload:
+
+    _Example request body payload:_
     ```javascript
     {
         password: 'updatedpasword!'
     }
     ```
     - Find a user by `req.params.user_id` and update their password with `req.body` data.
-        - If successful, `{ message: 'New password created!' }`
+        - If successful, resond with JSON `{ "message": "New password created!" }`.
+
 - `DELETE - /users/:user_id`
     - Delete an existing user.
     - Find a user by `req.params.user_id` and remove.
-        - If user id not found, respond with `{ message: 'User ID not found' }`.
-        - If successful, respond with `{ message: 'User id: ${user_id} successfully deleted' }`.
+        - If `user_id` not found, respond with JSON `{ "message": "User ID not found" }`.
+        - If successful, respond with JSON `{ "message": "User id: [user_id] successfully deleted" }`.
 
 ---
 
@@ -143,10 +146,12 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 - `GET - /products`
     - Fetch all products from db.
         - If successful, respond with all products.
+
 - `GET - /products/:product_id`
     - Find single product using `req.params.product_id`.
-        - If product id not found, respond with `{ message: 'Product not found' }`.
+        - If `product_id` not found, respond with JSON `{ "message": "Product not found" }`.
         - If successful, respond with product object from db.
+
 - `POST - /products/new`
     - Create a new product.
 
@@ -161,8 +166,9 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
     ```
 
     - Insert `req.body` data into db.
-        - If any required field is missing from request body, responds with `{ message: 'Must POST all product fields' }`.
+        - If any required field is missing from request body, responds with JSON `{ "message": "Must POST all product fields" }`.
         - If successful, respond with posted product from db.
+
 - `PUT - /products/:product_id`
     - Update an existing product.
 
@@ -176,12 +182,12 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
     }
     ```
     - Find product by using `req.params.product_id` and update with new `req.body` data.
-        - If successful, respond with `{ message: 'Product: ${product_id} has been updated' }`.
+        - If successful, respond with JSON `{ "message": "Product: [product_id] has been updated" }`.
 
 - `DELETE - /products/:product_id`
     - Find a product using `req.params.product_id` and remove.
-        - If product_id not found, respond with `{ message: 'Product id: ${product_id} not found' } `.
-        - If successful, repsond with `{ message: 'Product id: ${product_id} successfully deleted' }`.
+        - If `product_id` not found, respond with JSON `{ "message": "Product id: [product_id] not found" } `.
+        - If successful, respond with JSON `{ "message": "Product id: [product_id] successfully deleted" }`.
 
 ---
 
@@ -193,11 +199,11 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 
 - `POST - /cart/:user_id/:product_id`
     - Insert into Cart table with `req.params.user_id` and `req.params.product_id` valid foreign keys.
-        - If successful, respond with `{ success: true }`.
+        - If successful, respond with JSON `{ "success": true }`.
 
 - `DELETE - /cart/:user_id/:product_id`
-    - Remove record from db where user_id and product_id match `req.params.user_id` and `req.params.product_id`.
-        - If successful, respond with `{ success: true }`.
+    - Remove row from db where columns user_id and product_id match `req.params.user_id` and `req.params.product_id`.
+        - If successful, respond with JSON `{ "success": true }`.
 
 ---
 
