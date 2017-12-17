@@ -45,6 +45,7 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 | user_id      | Integer (FK - ref. Users) |
 | products_id  | Integer (FK - ref. Products) |
 | created_at   | Date (timestamp) |
+| updated_at   | Date (timestamp) |
 
 ---
 
@@ -71,11 +72,12 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 
 ### Knex setup
 
-Follow the instructions for setting up knex.js in the [knex setup gist](https://gist.github.com/NigelEarle/80150ff1c50031e59b872baf0e474977).
+Follow along with the below instructions for setting up knex.js. You can also refer to the [knex setup gist](https://gist.github.com/NigelEarle/80150ff1c50031e59b872baf0e474977) for a more in-depth explanation.
 
-Follow the [knex migrations and seeds gist](https://gist.github.com/NigelEarle/70db130cc040cc2868555b29a0278261) for creating migration and seed scripts to populate your database.
-
-Ask an instructor or TA for help if you have questions!
+1. `touch knexfile.js` in root of project and create your enviroment configuration.
+2. `mkdir` migrations and seeds directories in root of project. (Be sure to reference these directory paths in `migration` and `seed` config objects in `knexfile.js`)
+3. Create migration, seed scripts to create tables and popluate with data. (Reference [migration and seed gist](https://gist.github.com/NigelEarle/70db130cc040cc2868555b29a0278261) for instructions)
+4. Run migration and seed scripts
 
 ---
 
@@ -86,87 +88,120 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 ### Users
 
 - `GET - /users/:user_id`
-
-    - Fetch user by id - reference by `req.params.user_id`.
+    - Find a user using `req.params.user_id`.
         - If user id not found, respond with `{ message: 'User not found' }`
         - If successful, respond with user object.
 - `POST - /users/login`
-    - Request body should include `email` and `password` fields to authenticate existing user. Query should find user by `req.body.email` and check existing password against `req.body.password`.
+    - Log a user in.
+    Example request body payload:
+    ```javascript
+    {
+        email: 'jesse@devleague.com',
+        password: 'password'
+    }
+    ```
+    - Find a user by `req.body.email` and check existing password against `req.body.password`.
         - If email not found, respond with `{ message: 'User not found' }`
         - If passwords don't match, respond with `{ message: 'Incorrect password' }`
         - If successful, respond with user object.
 
 - `POST - /users/register`
-    - Request body should include `email` and `password` fields to create a new user.
+    - Register a new user in the database.
+    Example request body payload:
+    ```javascript
+    {
+        email: 'jesse@devleague.com',
+        password: 'password'
+    }
+    ```
+    - Find a user in the db using `req.body.email`.
         - If email already exists, repond with `{ message: 'User already exists' }`
         - If successful, respond with posted user object from db.
 - `PUT - /users/:user_id/forgot-password`
-    - Request body should include new password - reference user by `req.params.user_id`.
+    - Update an existing users password.
+    Example request body payload:
+    ```javascript
+    {
+        password: 'updatedpasword!'
+    }
+    ```
+    - Find a user by `req.params.user_id` and update their password with `req.body` data.
         - If successful, `{ message: 'New password created!' }`
-- `DELETE - /users/:user_id/delete`
-    - Delete user, reference by `req.params.user_id`.
-        - If user id not found, respond with `{ message: 'User ID not found' }`
-        - If successful, respond with `{ message: 'User id: ${user_id} successfully deleted' }`
+- `DELETE - /users/:user_id`
+    - Delete an existing user.
+    - Find a user by `req.params.user_id` and remove.
+        - If user id not found, respond with `{ message: 'User ID not found' }`.
+        - If successful, respond with `{ message: 'User id: ${user_id} successfully deleted' }`.
 
 ---
 
 ### Products
 
 - `GET - /products`
-
     - Fetch all products from db.
         - If successful, respond with all products.
-
 - `GET - /products/:product_id`
-
-    - Fetch single product, reference by `req.params.product_id`.
-        - If product id not found, respond with `{ message: 'Product not found' }`
+    - Find single product using `req.params.product_id`.
+        - If product id not found, respond with `{ message: 'Product not found' }`.
         - If successful, respond with product object from db.
-
 - `POST - /products/new`
-
-    - Request body should include all fields required by products table (`title`, `description`, `inventory`, `price`).
-        - If any required field is missing from request body, responds with `{ message: 'Must send all product fields' }`
+    - Create a new product.
+    Example request body payload.
+    ```javascript
+    {
+        title: 'Brand new product!',
+        description : 'Super brand new!',
+        inventory: 1,
+        price: 100.99
+    }
+    ```
+    - Insert `req.body` data into db.
+        - If any required field is missing from request body, responds with `{ message: 'Must POST all product fields' }`.
         - If successful, respond with posted product from db.
+- `PUT - /products/:product_id`
+    - Update an existing product.
+    Example request body.
+    ```javascript
+    {
+        title: 'Brand new updated product!',
+        description: 'Slight brand new!'
+        inventory: 4,
+        price: 100.98
+    }
+    ```
+    - Find product by using `req.params.product_id` and update with new `req.body` data.
+        - If successful, respond with `{ message: 'Product: ${product_id} has been updated' }`.
 
-- `PUT - /products/:product_id/update`
-
-    - Request body should include any and all changes specific to existing columns in db. Product can be referenced by `req.params.id`.
-        - If successful, respond with `{ message: 'Product: ${product_id} has been updated' }`
-
-- `DELETE - /products/:product_id/delete`
-
-    - Delete product by `req.params.product_id`
-        - If product_id not found, respond with `{ message: 'Product id: ${product_id} not found' } `
-        - If successful, repsond with `{ message: 'Product id: ${product_id} successfully deleted' }`
+- `DELETE - /products/:product_id`
+    - Find a product using `req.params.product_id` and remove.
+        - If product_id not found, respond with `{ message: 'Product id: ${product_id} not found' } `.
+        - If successful, repsond with `{ message: 'Product id: ${product_id} successfully deleted' }`.
 
 ---
 
 ### Cart
 
 - `GET - /cart/:user_id`
+    - Find all products associated to a user, using `req.params.user_id`, through the `Cart` table.
+        - If successful, resond with all products associated to `user_id`.
 
-    - Fetch all products, reference by `req.params.user_id`, from products through cart.
-        - If successful, resond with all products matching user id through cart
+- `POST - /cart/:user_id/:product_id`
+    - Insert into Cart table with `req.params.user_id` and `req.params.product_id` valid foreign keys.
+        - If successful, respond with `{ success: true }`.
 
-- `POST - /cart/:user_id/`
-
-    - Request body should include `product_id`. Insert into Cart table with `req.params.user_id` and `req.body.product_id` valid foreign keys.
-        - If successful, respond with `{ success: true }`
-
-- `DELETE - /cart/:cart_item_id/delete`
-    - Remove record from db where `req.params.cart_item_id` matches.
-        - If successful, respond with `{message: Cart item id: ${cart_item_id} successfully deleted`
+- `DELETE - /cart/:user_id/:product_id`
+    - Remove record from db where user_id and product_id match `req.params.user_id` and `req.params.product_id`.
+        - If successful, respond with `{ success: true }`.
 
 ---
 
 # Stretch Goals
 
 Create a `Purchases/Ledger` table to track purchases by `user_id`.
-- GET purchases by user id
-- GET user id purchases within timeframe - month, year
-- POST checkout endpoint ref. purchases table
-- Should decrement inventory of product
+GET purchases by user id
+GET user id purchases within timeframe - month, year
+POST checkout endpoint ref. purchases table
+should decrement inventory of product
 
 ### Example Purchases/Ledger Table
 
