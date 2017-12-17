@@ -93,11 +93,12 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
         - If successful, respond with user object.
 - `POST - /users/login`
     - Log a user in.
-    Example request body payload:
-    ```javascript
+
+    _Example request body payload:_
+    ```
     {
-        email: 'jesse@devleague.com',
-        password: 'password'
+        "email": "jesse@devleague.com",
+        "password": "password"
     }
     ```
     - Find a user by `req.body.email` and check existing password against `req.body.password`.
@@ -107,13 +108,15 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 
 - `POST - /users/register`
     - Register a new user in the database.
-    Example request body payload:
+    
+    _Example request body payload:_
     ```javascript
     {
-        email: 'jesse@devleague.com',
-        password: 'password'
+        "email": "jesse@devleague.com",
+        "password": "password"
     }
     ```
+
     - Find a user in the db using `req.body.email`.
         - If email already exists, repond with `{ message: 'User already exists' }`
         - If successful, respond with posted user object from db.
@@ -146,27 +149,30 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
         - If successful, respond with product object from db.
 - `POST - /products/new`
     - Create a new product.
-    Example request body payload.
+
+    _Example request body payload:_
     ```javascript
     {
-        title: 'Brand new product!',
-        description : 'Super brand new!',
-        inventory: 1,
-        price: 100.99
+        "title": "Brand new product!",
+        "description" : "Super brand new!",
+        "inventory": 1,
+        "price": 100.99
     }
     ```
+
     - Insert `req.body` data into db.
         - If any required field is missing from request body, responds with `{ message: 'Must POST all product fields' }`.
         - If successful, respond with posted product from db.
 - `PUT - /products/:product_id`
     - Update an existing product.
-    Example request body.
+
+    _Example request body payload:_
     ```javascript
     {
-        title: 'Brand new updated product!',
-        description: 'Slight brand new!'
-        inventory: 4,
-        price: 100.98
+        "title": "Brand new updated product!",
+        "description": "Slight brand new!",
+        "inventory": 4,
+        "price": 100.98
     }
     ```
     - Find product by using `req.params.product_id` and update with new `req.body` data.
