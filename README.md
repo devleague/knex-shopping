@@ -13,7 +13,7 @@ We will be building a RESTful, JSON resource API shopping cart application! This
 
 ## Tables
 
-We will be building and utilizing 3 relational tables - `Users`, `Products` and `Cart` tables. Create a UML diagram on table relations and have it reviewed by intructor or TA.
+We will be building and utilizing 3 relational tables - `Users`, `Products` and `Carts` tables. Create a UML diagram on table relations and have it reviewed by intructor or TA.
 
 ### `Users`
 
@@ -37,7 +37,7 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 | created_at    | Date (timestamp) |
 | updated_at    | Date (timestamp) |
 
-### `Cart`
+### `Carts`
 
 | Column        | Type          |
 | ------------- |:-------------:|
@@ -64,11 +64,11 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 6. Create route files in `routes` directory.
     - `touch routes/users.js`
     - `touch routes/products.js`
-    - `touch routes/cart.js`
+    - `touch routes/carts.js`
 7. Mount endpoints in `server.js`related to route file.
     - `routes/users.js`    --> `http://localhost:3000/users`
     - `routes/products.js` --> `http://localhost:3000/products`
-    - `routes/cart.js`     --> `http://localhost:3000/cart`
+    - `routes/carts.js`     --> `http://localhost:3000/carts`
 
 ### Knex setup
 
@@ -108,7 +108,7 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 
 - `POST - /users/register`
     - Register a new user in the database.
-    
+
     _Example request body payload:_
     ```javascript
     {
@@ -191,17 +191,17 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 
 ---
 
-### Cart
+### Carts
 
-- `GET - /cart/:user_id`
-    - Find all products associated to a user, using `req.params.user_id`, through the `Cart` table.
+- `GET - /carts/:user_id`
+    - Find all products associated to a user, using `req.params.user_id`, through the `Carts` table.
         - If successful, resond with all products associated to `user_id`.
 
-- `POST - /cart/:user_id/:product_id`
-    - Insert into Cart table with `req.params.user_id` and `req.params.product_id` valid foreign keys.
+- `POST - /carts/:user_id/:product_id`
+    - Insert into Carts table with `req.params.user_id` and `req.params.product_id` valid foreign keys.
         - If successful, respond with JSON `{ "success": true }`.
 
-- `DELETE - /cart/:user_id/:product_id`
+- `DELETE - /carts/:user_id/:product_id`
     - Remove row from db where columns user_id and product_id match `req.params.user_id` and `req.params.product_id`.
         - If successful, respond with JSON `{ "success": true }`.
 
