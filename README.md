@@ -83,7 +83,7 @@ Follow along with the below instructions for setting up knex.js. You can also re
 
 ## Endpoints
 
-Use the built in `knex.js` query methods to perform CRUD operations on our DB. Reference the [knex.js documentation](http://knexjs.org/) for usage! All endpoints should except either `x-www-form-urlencoded` or `raw JSON` via Postman and respond with `JSON`.
+Use the built in `knex.js` query methods to perform CRUD operations on our DB. Reference the [knex.js documentation](http://knexjs.org/) for usage! All endpoints should accept either `x-www-form-urlencoded` or `raw JSON` via Postman and respond with `JSON`.
 
 ### Users
 
