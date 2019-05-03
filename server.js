@@ -8,21 +8,39 @@ const bodyParser = require('body-parser');
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
-//app.use('/users', users);
+app.use('/users', users);
 //app.use('/products', products);
 //app.use('/carts', carts);
 app.get('/', function (req, res) {
-  //res.send('Smoke test');
-  knex.select().from('products').then((result) => {
-    res.send(result);
+  //let promise = new Promise(function(resolve, reject) {
+    //resolve(
+  //res.send(knex.raw('SELECT * FROM products'));
+
+  knex.raw('SELECT * FROM products').then((result) => {
+    res.send(result.rows);
   })
+  .catch((err) => {
+    res.send(err);
+  });
+
+
+  //});
+  //promise.then(function(result){
+    // res.send(result.rows);
+  //});
+  //promise
+  // .catch(function(err){
+  //   res.send(err);
+  // });
 });
 
+// knex.raw returns promise.
+// function x (result){
+//   res.send(result.rows);
+// }
+
+// function y (err){
+
+// }
+
 app.listen(3000);
-
-// const knex = require('./database'); 
-
-// knex.select().from('users')
-//   .then((result) => {
-//     console.log(result);
-//   })
