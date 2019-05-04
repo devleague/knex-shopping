@@ -5,9 +5,13 @@
 We will be building a RESTful, JSON resource API shopping cart application! This project will be entirely back-end, meaning we can test all of our endpoints through `Postman` app.
 
 ## Requirements / Tools
-- PostgreSQL
+- PostgreSQL (via docker-compose)
 - Node.js / Express.js
 - Knex.js (built-in library methods)
+
+## ENV file
+
+Make sure your .env file is created and has relevant values for all the keys. 
 
 ---
 
@@ -57,7 +61,7 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 3. Install the following via `npm`
     - express
     - body-parser
-    - knex
+    - knex & knex cli
     - pg
 4. Setup bare-bones express server with body-paser middleware in `server.js`, listening on port 3000.
 5. `mkdir routes` in the root of your project.
@@ -74,10 +78,9 @@ We will be building and utilizing 3 relational tables - `Users`, `Products` and 
 
 Follow along with the below instructions for setting up knex.js. You can also refer to the [knex setup gist](https://gist.github.com/NigelEarle/80150ff1c50031e59b872baf0e474977) for a more in-depth explanation.
 
-1. `touch knexfile.js` in root of project and create your enviroment configuration.
-2. `mkdir` migrations and seeds directories in root of project. (Be sure to reference these directory paths in `migration` and `seed` config objects in `knexfile.js`)
-3. Create migration, seed scripts to create tables and popluate with data. (Reference [migration and seed gist](https://gist.github.com/NigelEarle/70db130cc040cc2868555b29a0278261) for instructions)
-4. Run migration and seed scripts
+1. `knex init` in root of project and create your enviroment configuration.
+1. Create migrations and seeds using the knex cli.
+1. Run migration and seed scripts using the knex cli.
 
 ---
 
@@ -209,17 +212,17 @@ Use the built in `knex.js` query methods to perform CRUD operations on our DB. R
 
 # Stretch Goals
 
-Create a `Purchases/Ledger` table to track purchases by `user_id`.
-GET purchases by user id
-GET user id purchases within timeframe - month, year
-POST checkout endpoint ref. purchases table
-should decrement inventory of product
+Create a `Purchases/Ledger` table to track purchases by `user_id`.  
+GET /purchases/:user_id - Return purchases by user id  
+GET /purchases/:user_id/:year/:month/:day - Return all purchases made before the given year, month, day  
+POST /purchases/:user_id/:product_id - Create purchase, should decrement inventory of product  
+DELETE /purchases/:user_id/:product_id - Delete purchase, should increment inventory of product  
 
 ### Example Purchases/Ledger Table
 
-| Column        | Type          |
-| ------------- |:-------------:|
-| id      | Serial (increments) |
-| user_id      | Integer (FK - ref. Users) |
-| products_id  | Integer (FK - ref. Products) |
-| created_at   | Date (timestamp) |
+| Column        | Type                         |
+| ------------- |:----------------------------:|
+| id            | Serial (increments)          |
+| user_id       | Integer (FK - ref. Users)    |
+| products_id   | Integer (FK - ref. Products) |
+| created_at    | Date (timestamp)             |
