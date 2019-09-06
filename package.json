@@ -17,5 +17,12 @@
   "bugs": {
     "url": "https://github.com/rianmueller/knex-shopping/issues"
   },
-  "homepage": "https://github.com/rianmueller/knex-shopping#readme"
+  "homepage": "https://github.com/rianmueller/knex-shopping#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "knex": "^0.19.3",
+    "pg": "^7.12.1"
+  }
 }
