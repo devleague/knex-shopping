@@ -3,9 +3,15 @@ const bodyParser = require("body-parser");
 const db = require("./database");
 const app = express();
 
-const PORT = 8080;
+const PORT = 3000;
 
 app.use(bodyParser.json());
+
+app.get("/users", (req, res) => {});
+
+app.get("/products", (req, res) => {});
+
+app.get("/carts", (req, res) => {});
 
 app.get("/", (req, res) => {
   db.raw("SELECT * FROM users").then(results => {
