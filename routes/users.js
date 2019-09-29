@@ -8,7 +8,9 @@ router.get("/users/:user_id", (req, res) => {
   db.raw(`SELECT * FROM users WHERE user_id = ${req.params.user_id}`).then(
     results => {
       console.log(results.rows);
-      res.json(results.rows);
+      if (!results) {
+        res.json({ message: "User not found" });
+      } else res.json(results.rows);
     }
   );
 });

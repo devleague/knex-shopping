@@ -1,8 +1,6 @@
 // Update with your config settings.
 
-const dotenv = require("dotenv").config();
-
-process.env.POSTGRES_DB;
+require("dotenv").config();
 
 module.exports = {
   client: "postgresql",

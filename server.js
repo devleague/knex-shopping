@@ -1,11 +1,18 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const users = require("routes/users.js");
+const products = require("routes/products.js");
+const carts = require("routes/carts.js");
 const db = require("./database");
 const app = express();
 
 const PORT = 3000;
 
 app.use(bodyParser.json());
+
+app.use("/users", users);
+app.use("/products", products);
+app.use("/carts", carts);
 
 app.get("/users", (req, res) => {});
 
