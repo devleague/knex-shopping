@@ -1,18 +1,36 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const users = require("routes/users.js");
-const products = require("routes/products.js");
-const carts = require("routes/carts.js");
+const users = require("./routes/users.js");
+const products = require("./routes/products.js");
+const carts = require("./routes/carts.js");
 const db = require("./database");
+
 const app = express();
 
 const PORT = 3000;
 
 app.use(bodyParser.json());
 
-app.use("/users", users);
-app.use("/products", products);
-app.use("/carts", carts);
+// app.use("/users", users);
+// app.use("/products", products);
+// app.use("/carts", carts);
+
+app.get("/users/:user_id", (req, res) => {
+  console.log("Get user by ID: " + req.params.user_id);
+  console.log(req.method + " " + req.url);
+  db.raw(`SELECT * FROM users WHERE id = ${req.params.user_id}`).then(
+    results => {
+      console.log(results.rows);
+      if (!results) {
+        res.json({ message: "User not found" });
+      } else res.json(results.rows);
+    }
+  );
+});
+
+app.post("/users/login", (req, res) => {
+  console.log(req.method + " " + req.url);
+});
 
 app.get("/users", (req, res) => {});
 
