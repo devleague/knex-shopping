@@ -1,5 +1,5 @@
 const express = require("express");
-// const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const users = require("./routes/users.js");
 const products = require("./routes/products.js");
 const carts = require("./routes/carts.js");
@@ -10,8 +10,8 @@ const app = express();
 
 const PORT = 3000;
 
-// app.use(bodyParser.json());
-app.use(express.urlencoded());
+app.use(bodyParser.urlencoded());
+// app.use(express.urlencoded());
 
 app.use(methodOverride("_method"));
 
@@ -50,8 +50,20 @@ app.post("/users/login", (req, res) => {
 });
 
 app.post("/users/register", (req, res) => {
-  console.log(req.method + " " + req.url);
-  db.raw(``).then();
+  db.raw("SELECT email FROM users WHERE email = ?", req.body.email).then(
+    results => {
+      if (results.rows.length > 0) {
+        res.status(500).json({ message: "User already exists" });
+      } else {
+        db.raw(
+          "INSERT INTO users (email, password) VALUES (?, ?) RETURNING *",
+          [req.body.email, req.body.password]
+        ).then(results => {
+          res.json(results.rows);
+        });
+      }
+    }
+  );
 });
 
 app.put("/users/:user_id", (req, res) => {
