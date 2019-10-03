@@ -1,34 +1,64 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const users = require("./routes/users.js");
 const products = require("./routes/products.js");
 const carts = require("./routes/carts.js");
 const db = require("./database");
+const methodOverride = require("method-override");
 
 const app = express();
 
 const PORT = 3000;
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.urlencoded());
+
+app.use(methodOverride("_method"));
 
 // app.use("/users", users);
 // app.use("/products", products);
 // app.use("/carts", carts);
 
 app.get("/users/:user_id", (req, res) => {
-  console.log("Get user by ID: " + req.params.user_id);
-  console.log(req.method + " " + req.url);
-  db.raw(`SELECT * FROM users WHERE id = ${req.params.user_id}`).then(
+  db.raw("SELECT * FROM users WHERE id = ?", req.params.user_id).then(
     results => {
-      console.log(results.rows);
-      if (!results) {
-        res.json({ message: "User not found" });
+      if (results.rows.length === 0) {
+        res.status(500).json({ message: "User not found" });
+      } else {
+        res.json(results.rows);
+      }
+    }
+  );
+});
+
+app.get("/users", (req, res) => {
+  db.raw("SELECT * FROM users").then(results => {
+    res.json(results.rows);
+  });
+});
+
+app.post("/users/login", (req, res) => {
+  db.raw("SELECT * FROM users WHERE email = ?", req.body.email).then(
+    results => {
+      if (results.rows.length === 0) {
+        res.status(500).json({ message: "User not found" });
+      } else if (results.rows[0].password !== req.body.password) {
+        res.status(500).json({ message: "Incorrect password" });
       } else res.json(results.rows);
     }
   );
 });
 
-app.post("/users/login", (req, res) => {
+app.post("/users/register", (req, res) => {
+  console.log(req.method + " " + req.url);
+  db.raw(``).then();
+});
+
+app.put("/users/:user_id", (req, res) => {
+  console.log(req.method + " " + req.url);
+});
+
+app.delete("/users/:user_id", (req, res) => {
   console.log(req.method + " " + req.url);
 });
 
@@ -37,13 +67,6 @@ app.get("/users", (req, res) => {});
 app.get("/products", (req, res) => {});
 
 app.get("/carts", (req, res) => {});
-
-app.get("/", (req, res) => {
-  db.raw("SELECT * FROM users").then(results => {
-    console.log(results.rows);
-    res.json(results.rows);
-  });
-});
 
 app.post("/users", (req, res) => {
   const body = req.body;
