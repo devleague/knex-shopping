@@ -67,17 +67,30 @@ app.post("/users/register", (req, res) => {
 });
 
 app.put("/users/:user_id/forgot-password", (req, res) => {
-  console.log(req.method + " " + req.url);
   db.raw("UPDATE users SET password = ? WHERE id = ? RETURNING *", [
     req.body.password,
     req.params.user_id
   ]).then(results => {
-    res.json(results.rows);
+    res.json({ message: "New password created!" });
   });
 });
 
 app.delete("/users/:user_id", (req, res) => {
-  console.log(req.method + " " + req.url);
+  db.raw("SELECT * FROM users WHERE id = ?", [req.params.user_id]).then(
+    results => {
+      if (results.rows.length === 0) {
+        res.status(500).json({ message: "User ID not found" });
+      } else {
+        db.raw("DELETE FROM users WHERE id = ? RETURNING *", [
+          req.params.user_id
+        ]).then(results => {
+          res.json({
+            message: `User id: ${results.rows[0].id} successfully deleted`
+          });
+        });
+      }
+    }
+  );
 });
 
 app.get("/users", (req, res) => {});
