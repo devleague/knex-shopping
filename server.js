@@ -66,8 +66,14 @@ app.post("/users/register", (req, res) => {
   );
 });
 
-app.put("/users/:user_id", (req, res) => {
+app.put("/users/:user_id/forgot-password", (req, res) => {
   console.log(req.method + " " + req.url);
+  db.raw("UPDATE users SET password = ? WHERE id = ? RETURNING *", [
+    req.body.password,
+    req.params.user_id
+  ]).then(results => {
+    res.json(results.rows);
+  });
 });
 
 app.delete("/users/:user_id", (req, res) => {
