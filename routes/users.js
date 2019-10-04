@@ -63,10 +63,10 @@ router.post("/register", (req, res) => {
 });
 
 router.put("/:user_id/forgot-password", (req, res) => {
-  db.raw("UPDATE users SET password = ? WHERE id = ? RETURNING *", [
-    req.body.password,
-    req.params.user_id
-  ])
+  db.raw(
+    "UPDATE users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? RETURNING *",
+    [req.body.password, req.params.user_id]
+  )
     .then(results => {
       res.json({ message: "New password created!" });
     })

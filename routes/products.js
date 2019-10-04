@@ -76,7 +76,7 @@ router.put("/:product_id", (req, res) => {
           .json({ message: "Must PUT at least one product field" });
       } else {
         db.raw(
-          "UPDATE products SET title = ?, description = ?, inventory = ?, price = ? WHERE id = ? RETURNING *",
+          "UPDATE products SET title = ?, description = ?, inventory = ?, price = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? RETURNING *",
           [
             req.body.title,
             req.body.description,
