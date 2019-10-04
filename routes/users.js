@@ -46,6 +46,8 @@ router.post("/register", (req, res) => {
     .then(results => {
       if (results.rows.length > 0) {
         res.status(500).json({ message: "User already exists" });
+      } else if (!req.body.email || !req.body.password) {
+        res.status(500).json({ message: "Must POST email and password" });
       } else {
         db.raw(
           "INSERT INTO users (email, password) VALUES (?, ?) RETURNING *",
