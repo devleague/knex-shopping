@@ -3,7 +3,19 @@ const db = require("../database");
 
 const router = express.Router();
 
-router.get("/:user_id", (req, res) => {});
+router.get("/:user_id", (req, res) => {
+  db.raw("SELECT * FROM purchases WHERE user_id = ?", [req.params.user_id])
+    .then(results => {
+      if (results.rows.length === 0) {
+        res.status(500).json({ message: "User or purchases not found" });
+      } else {
+        res.json(results.rows);
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: err.message });
+    });
+});
 
 router.get("/:user_id/:year/:month/:day", (req, res) => {});
 
