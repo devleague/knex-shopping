@@ -82,6 +82,31 @@ router.post("/:user_id/:product_id", (req, res) => {
     });
 });
 
-router.delete("/:user_id/:product_id", (req, res) => {});
+router.delete("/:user_id/:product_id", (req, res) => {
+  db.raw("SELECT * FROM purchases WHERE user_id = ? AND products_id = ?", [
+    req.params.user_id,
+    req.params.product_id
+  ])
+    .then(results => {
+      if (results.rows.length === 0) {
+        res.status(500).json({ message: "Purchase not found" });
+      } else {
+        db.raw(
+          "DELETE FROM purchases WHERE user_id = ? AND products_id = ? RETURNING *",
+          [req.params.user_id, req.params.product_id]
+        ).then(results => {
+          db.raw(
+            "UPDATE products SET inventory = inventory + ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? RETURNING *",
+            [results.rows.length, req.params.product_id]
+          ).then(results => {
+            res.json({ message: "Purchases deleted" });
+          });
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: err.message });
+    });
+});
 
 module.exports = router;
