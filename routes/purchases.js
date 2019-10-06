@@ -17,7 +17,25 @@ router.get("/:user_id", (req, res) => {
     });
 });
 
-router.get("/:user_id/:year/:month/:day", (req, res) => {});
+router.get("/:user_id/:year/:month/:day", (req, res) => {
+  let date = new Date(
+    `${req.params.year}-${req.params.month}-${req.params.day}`
+  ).toISOString();
+  db.raw("SELECT * FROM purchases WHERE user_id = ? AND created_at < ?", [
+    req.params.user_id,
+    date
+  ])
+    .then(results => {
+      if (results.rows.length === 0) {
+        res.status(500).json({ message: "User or purchases not found" });
+      } else {
+        res.json(results.rows);
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: err.message });
+    });
+});
 
 router.post("/:user_id/:product_id", (req, res) => {
   db.raw("SELECT * FROM users WHERE id = ?", req.params.user_id)
