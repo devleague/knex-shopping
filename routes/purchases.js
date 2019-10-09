@@ -51,29 +51,32 @@ router.post("/:user_id/:product_id", (req, res) => {
               res.status(500).json({ message: "Product not found" });
             } else {
               db("products")
-                .select("inventory")
                 .where({ id: req.params.product_id })
                 .then(results => {
                   if (results[0].inventory < 1) {
                     res.status(500).json({ message: "Insufficient inventory" });
                   } else {
-                    db("purchases")
-                      .insert({
-                        user_id: req.params.user_id,
-                        products_id: req.params.product_id
-                      })
-                      .then(results => {
-                        let date = new Date().toISOString();
-                        db("products")
-                          .where({ id: req.params.product_id })
-                          .decrement("inventory", 1)
-                          .update({ updated_at: date }, "*")
-                          .then(results => {
-                            res.json({
-                              message: "Purchase successful"
+                    db.transaction(result => {
+                      db("purchases")
+                        .insert({
+                          user_id: req.params.user_id,
+                          products_id: req.params.product_id
+                        })
+                        .then(results => {
+                          let date = new Date().toISOString();
+                          db("products")
+                            .where({ id: req.params.product_id })
+                            .decrement("inventory", 1)
+                            .update({ updated_at: date }, "*")
+                            .then(results => {
+                              res.json({
+                                message: "Purchase successful"
+                              });
                             });
-                          });
-                      });
+                        })
+                        .then(db.commit)
+                        .catch(db.rollback);
+                    });
                   }
                 });
             }
@@ -92,24 +95,28 @@ router.delete("/:user_id/:product_id", (req, res) => {
       if (results.length === 0) {
         res.status(500).json({ message: "Purchase not found" });
       } else {
-        db("purchases")
-          .where({
-            user_id: req.params.user_id,
-            products_id: req.params.product_id
-          })
-          .del()
-          .returning("*")
-          .then(results => {
-            let addBack = results.length;
-            let date = new Date().toISOString();
-            db("products")
-              .where({ id: req.params.product_id })
-              .increment("inventory", addBack)
-              .update({ created_at: date })
-              .then(results => {
-                res.json({ message: "Purchases deleted" });
-              });
-          });
+        db.transaction(results => {
+          db("purchases")
+            .where({
+              user_id: req.params.user_id,
+              products_id: req.params.product_id
+            })
+            .del()
+            .returning("*")
+            .then(results => {
+              let addBack = results.length;
+              let date = new Date().toISOString();
+              db("products")
+                .where({ id: req.params.product_id })
+                .increment("inventory", addBack)
+                .update({ created_at: date })
+                .then(results => {
+                  res.json({ message: "Purchases deleted" });
+                });
+            })
+            .then(db.commit)
+            .catch(db.rollback);
+        });
       }
     })
     .catch(err => {
